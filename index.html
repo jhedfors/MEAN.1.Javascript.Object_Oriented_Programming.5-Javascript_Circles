@@ -88,8 +88,8 @@
 			}
 		}
 
-		this.createNewCircle = function(x,y){
-			var radius =50;
+		this.createNewCircle = function(x,y,time_pressed = 50){
+			var radius =time_pressed/10;
 			var new_circle = new Circle(x,y,radius,counter++);
 			circles.push(new_circle);
 			// console.log('created a new circle!', new_circle);
@@ -102,9 +102,33 @@
 	var playground = new PlayGround();
 	setInterval(playground.loop, 15);
 
-	document.onclick = function(e) {
-		playground.createNewCircle(e.x,e.y);
-	}
+	// document.onclick = function(e) {
+	// 	playground.createNewCircle(e.x,e.y);
+	// }
+
+//replaced onclick with this immediate function
+	( function(){
+
+		var mousedown_time;
+
+		function getTime(){
+			var date = new Date();
+			return date.getTime();
+		}
+
+		document.onmousedown = function(e){
+			mousedown_time = getTime();
+		}
+		document.onmouseup = function(e){
+			time_pressed = getTime() - mousedown_time;
+			playground.createNewCircle(e.x,e.y,time_pressed);
+		}
+
+		//technically we don't even need the mousedown variable but we're leaving it there for now..
+
+	})();
+
+
 
 	</script>
 
